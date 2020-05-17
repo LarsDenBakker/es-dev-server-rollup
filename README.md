@@ -23,7 +23,7 @@ const { wrapRollupPlugin } = require('es-dev-server-rollup');
 module.exports = {
   plugins: [
     wrapRollupPlugin(
-      replace({ include: ['src/**/*.js'], __buildEnv__: '"production"' })
+      replace({ include: ['src/**/*.js'], __environment__: '"development"' })
     ),
   ],
 };
@@ -31,7 +31,7 @@ module.exports = {
 
 ## Performance
 
-Some rollup plugins do expensive operations. During development this matters a lot more than during a production build. It's recommended to always scope the usage of plugins using the `include` and `exclude` options.
+Some rollup plugins do expensive operations. During development, this matters a lot more than during a production build. It's recommended to always scope the usage of plugins using the `include` and `exclude` options.
 
 ## non-standard file types
 
@@ -65,7 +65,7 @@ Since es-dev-server doesn't do any bundling, only the following lifecycle hooks 
 - load
 - transform
 
-Plugins which use other lifecycle hooks are mostly build optimizations, and are not interesting during development.
+Plugins that use other lifecycle hooks are mostly build optimizations and are not interesting during development.
 
 The following rollup plugins have been tested to work correctly:
 
@@ -79,6 +79,6 @@ The following rollup plugins have been tested to work correctly:
 - [@rollup/plugin-replace](https://github.com/rollup/plugins/tree/master/packages/replace)
 - [@rollup/plugin-sucrase](https://github.com/rollup/plugins/tree/master/packages/sucrase)
 
-The following rollup plugins don't work correctly at themoment:
+The following rollup plugins don't work correctly at the moment:
 
 - [@rollup/plugin-typescript](https://github.com/rollup/plugins/tree/master/packages/typescript) (use `@rollup/plugin-sucrase` with transform TS option)
