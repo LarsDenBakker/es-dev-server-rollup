@@ -8,11 +8,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/open-wc/open-wc.git",
+    "url": "https://github.com/LarsDenBakker/es-dev-server-rollup",
     "directory": "packages/es-dev-server-rollup"
   },
   "author": "open-wc",
-  "homepage": "https://github.com/open-wc/open-wc/tree/master/packages/es-dev-server-rollup",
+  "homepage": "https://github.com/LarsDenBakker/es-dev-server-rollup",
   "main": "./dist/es-dev-server-rollup.js",
   "engines": {
     "node": ">=10.0.0"
