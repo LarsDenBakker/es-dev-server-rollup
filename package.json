@@ -1,0 +1,79 @@
+{
+  "name": "es-dev-server-rollup",
+  "version": "0.0.1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Use rollup plugins in es-dev-server",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/open-wc/open-wc.git",
+    "directory": "packages/es-dev-server-rollup"
+  },
+  "author": "open-wc",
+  "homepage": "https://github.com/open-wc/open-wc/tree/master/packages/es-dev-server-rollup",
+  "main": "./dist/es-dev-server-rollup.js",
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "build:watch": "rm -rf dist && tsc --watch",
+    "start:alias": "es-dev-server --config demo/alias/config.js",
+    "start:node-resolve": "es-dev-server --config demo/node-resolve/config.js",
+    "start:inject": "es-dev-server --config demo/inject/config.js",
+    "start:dsv": "es-dev-server --config demo/dsv/config.js",
+    "start:image": "es-dev-server --config demo/image/config.js",
+    "start:json": "es-dev-server --config demo/json/config.js",
+    "start:replace": "es-dev-server --config demo/replace/config.js",
+    "start:commonjs": "es-dev-server --config demo/commonjs/config.js",
+    "start:sucrase": "es-dev-server --config demo/sucrase/config.js",
+    "start:sucrase-typescript": "es-dev-server --config demo/sucrase-typescript/config.js",
+    "test": "npm run test:node",
+    "test:node": "ts-mocha test/**/*.test.ts test/*.test.ts",
+    "test:watch": "ts-mocha **/*.test.ts --watch --watch-extensions ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "server",
+    "rollup",
+    "plugin",
+    "es-dev-server"
+  ],
+  "dependencies": {
+    "@open-wc/building-utils": "^2.18.0",
+    "@types/parse5": "^5.0.3",
+    "acorn": "^7.2.0",
+    "acorn-class-fields": "^0.3.2",
+    "acorn-import-meta": "^1.1.0",
+    "acorn-static-class-features": "^0.2.1",
+    "chokidar": "^3.4.0",
+    "es-dev-server": "^1.50.5",
+    "parse5": "^6.0.0",
+    "rollup": "^2.10.2",
+    "whatwg-url": "^8.1.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-alias": "^3.1.0",
+    "@rollup/plugin-commonjs": "^11.1.0",
+    "@rollup/plugin-dsv": "^2.0.1",
+    "@rollup/plugin-image": "^2.0.5",
+    "@rollup/plugin-inject": "^4.0.2",
+    "@rollup/plugin-json": "^4.0.3",
+    "@rollup/plugin-node-resolve": "^7.1.3",
+    "@rollup/plugin-replace": "^2.3.2",
+    "@rollup/plugin-sucrase": "^3.0.1",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "@types/node-fetch": "^2.5.7",
+    "chai": "^4.2.0",
+    "lit-html": "^1.2.1",
+    "mocha": "^6.0.0",
+    "node-fetch": "^2.6.0",
+    "ts-mocha": "^7.0.0",
+    "typescript": "^3.9.2"
+  }
+}

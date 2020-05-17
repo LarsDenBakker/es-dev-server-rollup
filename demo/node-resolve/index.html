@@ -1,0 +1,28 @@
+<html>
+  <body>
+    <h1>@rollup/plugin-node-resolve</h1>
+
+    <div id="test"></div>
+
+    <script type="module">
+      // inline bare modules are resolved
+      import { render, html } from 'lit-html';
+
+      window.__inlineNodeResolve = typeof render === 'function' && typeof html === 'function';
+    </script>
+
+    <script type="module">
+      import './module.js';
+      
+      window.__tests = {
+        inlineNodeResolve: window.__inlineNodeResolve || false,
+        nodeResolve: window.__nodeResolve || false,
+      };
+      document.getElementById('test').innerHTML = `<pre>${JSON.stringify(
+        window.__tests,
+        null,
+        2
+      )}</pre>`;
+    </script>
+  </body>
+</html>

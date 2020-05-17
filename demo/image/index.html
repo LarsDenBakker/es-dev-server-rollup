@@ -1,0 +1,27 @@
+<html>
+  <body>
+    <h1>@rollup/plugin-image</h1>
+
+    <div id="test"></div>
+
+    <script type="module">
+      import logo from './logo.png';
+
+      window.__inlineImage = logo.startsWith('data:image/png;base64,');
+    </script>
+
+    <script type="module">
+      import './module.js';
+
+      window.__tests = {
+        inlineImage: window.__inlineImage || false,
+        image: window.__image || false,
+      };
+      document.getElementById('test').innerHTML = `<pre>${JSON.stringify(
+        window.__tests,
+        null,
+        2
+      )}</pre>`;
+    </script>
+  </body>
+</html>

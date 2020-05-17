@@ -1,0 +1,27 @@
+<html>
+  <body>
+    <h1>@rollup/plugin-inject</h1>
+
+    <div id="test"></div>
+
+    <script type="module">
+      window.__inlineInjected =
+        typeof html === 'function' &&
+        SomeGlobal === 'global from injected import';
+    </script>
+
+    <script type="module">
+      import './module.js';
+
+      window.__tests = {
+        inlineInjected: window.__inlineInjected || false,
+        injected: window.__injected || false,
+      };
+      document.getElementById('test').innerHTML = `<pre>${JSON.stringify(
+        window.__tests,
+        null,
+        2
+      )}</pre>`;
+    </script>
+  </body>
+</html>

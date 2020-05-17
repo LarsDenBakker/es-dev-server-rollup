@@ -1,0 +1,25 @@
+<html>
+  <body>
+    <h1>@rollup/plugin-replace</h1>
+
+    <div id="test"></div>
+
+    <script type="module">
+      window.__inlineReplace = __buildEnv__ === 'production';
+    </script>
+
+    <script type="module">
+      import './module.js';
+
+      window.__tests = {
+        inlineReplace: window.__inlineReplace || false,
+        replace: window.__replace || false,
+      };
+      document.getElementById('test').innerHTML = `<pre>${JSON.stringify(
+        window.__tests,
+        null,
+        2
+      )}</pre>`;
+    </script>
+  </body>
+</html>

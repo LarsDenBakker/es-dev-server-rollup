@@ -1,0 +1,27 @@
+<html>
+  <body>
+    <h1>@rollup/plugin-dsv</h1>
+
+    <div id="test"></div>
+
+    <script type="module">
+      import fruit from './fruit.csv';
+
+      window.__inlineDsv = fruit.length === 3 && fruit[0].type === 'apples';
+    </script>
+
+    <script type="module">
+      import './module.js';
+
+      window.__tests = {
+        inlineDsv: window.__inlineDsv || false,
+        dsv: window.__dsv || false,
+      };
+      document.getElementById('test').innerHTML = `<pre>${JSON.stringify(
+        window.__tests,
+        null,
+        2
+      )}</pre>`;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+<html>
+  <body>
+    <h1>@rollup/plugin-commonjs</h1>
+
+    <div id="test"></div>
+
+    <script type="module">
+      import defaultCjs from './default-cjs.js';
+      import { namedCjs } from './named-cjs.js';
+      import * as reexported from './reexport.js';
+      import { esmCjs } from './__esModule-cjs.js';
+
+      window.__commonJs =
+        defaultCjs === 'default-cjs' &&
+        namedCjs === 'named-cjs' &&
+        reexported.defaultCjs === 'default-cjs' &&
+        reexported.namedCjs === 'named-cjs' &&
+        esmCjs === 'esmCjs';
+    </script>
+
+    <script type="module">
+      import './module.js';
+
+      window.__tests = {
+        inlineCommonjs: window.__inlineCommonJs || false,
+        commonjs: window.__commonJs || false,
+      };
+      document.getElementById('test').innerHTML = `<pre>${JSON.stringify(
+        window.__tests,
+        null,
+        2
+      )}</pre>`;
+    </script>
+  </body>
+</html>

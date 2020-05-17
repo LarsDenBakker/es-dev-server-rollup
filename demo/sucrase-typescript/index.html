@@ -1,0 +1,20 @@
+<html>
+  <body>
+    <h1>@rollup/plugin-sucrase typescript transforms</h1>
+
+    <div id="test"></div>
+
+    <script type="module">
+      import './module.ts';
+
+      window.__tests = {
+        sucraseTypescript: window.__sucraseTypescript || false,
+      };
+      document.getElementById('test').innerHTML = `<pre>${JSON.stringify(
+        window.__tests,
+        null,
+        2
+      )}</pre>`;
+    </script>
+  </body>
+</html>

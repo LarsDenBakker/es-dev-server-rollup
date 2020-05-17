@@ -1,0 +1,27 @@
+<html>
+  <body>
+    <h1>@rollup/plugin-json</h1>
+
+    <div id="test"></div>
+
+    <script type="module">
+      import fruit from './fruit.json';
+
+      window.__inlineJson = fruit.apples === 3;
+    </script>
+
+    <script type="module">
+      import './module.js';
+
+      window.__tests = {
+        inlineJson: window.__inlineJson || false,
+        json: window.__json || false,
+      };
+      document.getElementById('test').innerHTML = `<pre>${JSON.stringify(
+        window.__tests,
+        null,
+        2
+      )}</pre>`;
+    </script>
+  </body>
+</html>
