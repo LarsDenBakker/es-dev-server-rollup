@@ -1,6 +1,6 @@
 import path from 'path';
 import whatwgUrl from 'whatwg-url';
-import { Plugin as EdsPlugin, ParsedConfig } from 'es-dev-server';
+import { Plugin as EdsPlugin, ParsedConfig, virtualFilePrefix } from 'es-dev-server';
 import { URL, pathToFileURL, fileURLToPath } from 'url';
 import { Plugin as RollupPlugin, TransformPluginContext } from 'rollup';
 import {
@@ -16,7 +16,7 @@ import { toBrowserPath } from './utils';
 import { createPluginContext } from './PluginContext';
 import { FSWatcher } from 'chokidar';
 
-const NULL_BYTE_PREFIX = '/__es-dev-server-rollup__/';
+const NULL_BYTE_PREFIX = `${virtualFilePrefix}rollup`;
 const NULL_BYTE_PARAM = 'null-byte';
 
 function resolveFilePath(rootDir: string, path: string) {
