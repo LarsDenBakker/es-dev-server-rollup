@@ -1,6 +1,10 @@
 import path from 'path';
 import whatwgUrl from 'whatwg-url';
-import { Plugin as EdsPlugin, ParsedConfig, virtualFilePrefix } from 'es-dev-server';
+import {
+  Plugin as EdsPlugin,
+  ParsedConfig,
+  virtualFilePrefix,
+} from 'es-dev-server';
 import { URL, pathToFileURL, fileURLToPath } from 'url';
 import { Plugin as RollupPlugin, TransformPluginContext } from 'rollup';
 import {
@@ -16,8 +20,7 @@ import { toBrowserPath } from './utils';
 import { createPluginContext } from './PluginContext';
 import { FSWatcher } from 'chokidar';
 
-const NULL_BYTE_PREFIX = `${virtualFilePrefix}rollup`;
-const NULL_BYTE_PARAM = 'null-byte';
+const NULL_BYTE_PARAM = 'es-dev-server-rollup-null-byte';
 
 function resolveFilePath(rootDir: string, path: string) {
   const fileUrl = new URL(`.${path}`, `${pathToFileURL(rootDir)}/`);
@@ -101,27 +104,45 @@ export function wrapRollupPlugin(
         return undefined;
       }
 
-      if (resolvedImportFilePath.startsWith(rootDir)) {
+      const hasNullByte = resolvedImportFilePath.includes('\0');
+      const withoutNullByte = hasNullByte
+        ? resolvedImportFilePath.replace(new RegExp('\0', 'g'), '')
+        : resolvedImportFilePath;
+
+      if (withoutNullByte.startsWith(rootDir)) {
         const resolveRelativeTo = path.extname(filePath)
           ? path.dirname(filePath)
           : filePath;
         const relativeImportFilePath = path.relative(
           resolveRelativeTo,
-          resolvedImportFilePath
+          withoutNullByte
         );
         const resolvedImportPath = `${toBrowserPath(relativeImportFilePath)}`;
 
-        return resolvedImportPath.startsWith('/') ||
+        const prefixedImportPath =
+          resolvedImportPath.startsWith('/') ||
           resolvedImportPath.startsWith('.')
-          ? resolvedImportPath
-          : `./${resolvedImportPath}`;
+            ? resolvedImportPath
+            : `./${resolvedImportPath}`;
+
+        if (!hasNullByte) {
+          return prefixedImportPath;
+        } else {
+          const suffix = `${NULL_BYTE_PARAM}=${encodeURIComponent(
+            resolvedImportFilePath
+          )}`;
+          if (prefixedImportPath.includes('?')) {
+            return `${prefixedImportPath}&${suffix}`;
+          }
+          return `${prefixedImportPath}?${suffix}`;
+        }
       }
 
       // if the resolved import includes a null byte (\0) there is some special logic
       // these often are not valid file paths, so the browser cannot request them.
       // we rewrite them to a special URL which we deconstruct later when we load the file
       if (resolvedImportFilePath.includes('\0')) {
-        return `${NULL_BYTE_PREFIX}?${NULL_BYTE_PARAM}=${encodeURIComponent(
+        return `${virtualFilePrefix}?${NULL_BYTE_PARAM}=${encodeURIComponent(
           resolvedImportFilePath
         )}`;
       }
@@ -135,7 +156,7 @@ export function wrapRollupPlugin(
       }
 
       let filePath;
-      if (context.path.startsWith(NULL_BYTE_PREFIX)) {
+      if (context.URL.searchParams.has(NULL_BYTE_PARAM)) {
         // if this was a special URL constructed in resolveImport to handle null bytes,
         // the file path is stored in the search paramter
         filePath = context.URL.searchParams.get(NULL_BYTE_PARAM) as string;
