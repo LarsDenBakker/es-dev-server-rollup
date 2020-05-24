@@ -4,11 +4,17 @@
 
     <div id="test"></div>
 
+    <script>
+      window.process = { env: { NODE_ENV: 'production' } };
+    </script>
+
     <script type="module">
       import defaultCjs from './default-cjs.js';
       import { namedCjs } from './named-cjs.js';
       import * as reexported from './reexport.js';
       import { esmCjs } from './__esModule-cjs.js';
+      import './react-test.js';
+      import './graphql-test.js'
 
       window.__commonJs =
         defaultCjs === 'default-cjs' &&
