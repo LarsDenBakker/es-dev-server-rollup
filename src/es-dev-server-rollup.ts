@@ -64,8 +64,8 @@ export function wrapRollupPlugin(
         return;
       }
 
-      if (whatwgUrl.parseURL(source) != null) {
-        // don't resolve valid urls
+      if (! path.isAbsolute(source) && whatwgUrl.parseURL(source) != null) {
+        // don't resolve relative and valid urls 
         return source;
       }
 

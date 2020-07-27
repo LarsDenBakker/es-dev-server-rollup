@@ -264,7 +264,7 @@ describe.only('es-dev-server-rollup', () => {
       const text = await fetchText('app.js');
       expectIncludes(
         text,
-        'import "/__es-dev-server-rollup__/?null-byte=%00foo.js"'
+        'import "/__es-dev-server__/?es-dev-server-rollup-null-byte=%00foo.js"'
       );
     } finally {
       server.close();
@@ -285,7 +285,7 @@ describe.only('es-dev-server-rollup', () => {
     });
 
     try {
-      const text = await fetchText('__es-dev-server-rollup__/?null-byte=%00foo.js');
+      const text = await fetchText('__es-dev-server__/?es-dev-server-rollup-null-byte=%00foo.js');
       expectIncludes(
         text,
         'console.log("foo");'
