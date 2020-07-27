@@ -4,7 +4,6 @@ import { Context } from 'koa';
 import { FSWatcher } from 'chokidar';
 import { Plugin as EdsPlugin } from 'es-dev-server';
 import { VERSION as rollupVersion } from 'rollup';
-import { URL, pathToFileURL, fileURLToPath } from 'url';
 // @ts-ignore
 import injectClassFields from 'acorn-class-fields';
 // @ts-ignore
@@ -83,8 +82,7 @@ export function createPluginContext(
         ) {
           const result = await pl.resolveImport({ source, context });
           if (result) {
-            const fileUrl = new URL(result, `${pathToFileURL(importer)}`);
-            return { id: fileURLToPath(fileUrl) };
+            return { id: path.resolve(importer, result) };
           }
         }
       }
