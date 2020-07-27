@@ -59,7 +59,7 @@ export function wrapRollupPlugin(
       }
 
       if (! path.isAbsolute(source) && whatwgUrl.parseURL(source) != null) {
-        // don't resolve relative and valid urls 
+        // don't resolve relative and valid urls
         return source;
       }
 
@@ -154,7 +154,7 @@ export function wrapRollupPlugin(
         // if this was a special URL constructed in resolveImport to handle null bytes,
         // the file path is stored in the search paramter
         filePath = context.URL.searchParams.get(NULL_BYTE_PARAM) as string;
-      } else {path.join
+      } else {
         filePath = path.join(rootDir, context.path);
       }
 
