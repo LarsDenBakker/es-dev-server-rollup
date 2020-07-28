@@ -82,7 +82,6 @@ export function createPluginContext(
         ) {
           const result = await pl.resolveImport({ source, context });
           if (result) {
-            // todo: add test that verifies correctness of the joined path, ie. dirname was called
             return { id: path.join(path.dirname(importer), result) };
           }
         }
