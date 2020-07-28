@@ -82,7 +82,8 @@ export function createPluginContext(
         ) {
           const result = await pl.resolveImport({ source, context });
           if (result) {
-            return { id: path.resolve(importer, result) };
+            // todo: add test that verifies correctness of `path.resolve`
+            return { id: path.resolve(path.dirname(importer), result) };
           }
         }
       }
