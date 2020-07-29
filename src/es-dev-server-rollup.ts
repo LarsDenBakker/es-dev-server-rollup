@@ -45,7 +45,7 @@ export function wrapRollupPlugin(
       transformedOptions =
         rollupPlugin.options?.call(rollupPluginContext, rollupOptions) ??
         rollupOptions;
-      rollupPlugin.buildStart?.call(rollupPluginContext, transformedOptions);
+      rollupPlugin.buildStart?.call(rollupPluginContext, transformedOptions as any);
     },
 
     async resolveImport({ source, context }) {
