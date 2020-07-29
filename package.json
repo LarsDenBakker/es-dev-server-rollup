@@ -18,8 +18,8 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc",
-    "build:watch": "rm -rf dist && tsc --watch",
+    "build": "rimraf dist && tsc",
+    "build:watch": "rimraf dist && tsc --watch",
     "start:alias": "es-dev-server --config demo/alias/config.js",
     "start:node-resolve": "es-dev-server --config demo/node-resolve/config.js",
     "start:inject": "es-dev-server --config demo/inject/config.js",

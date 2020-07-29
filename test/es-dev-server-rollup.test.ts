@@ -83,6 +83,27 @@ describe.only('es-dev-server-rollup', () => {
         server.close();
       }
     });
+
+    it('can resolve imports with plugins that use the `resolve` helper', async () => {
+      const file = '../../hello.js';
+      const plugin: RollupPlugin = {
+        name: 'my-plugin',
+        async resolveId(id, importer) {
+          if(id === file) return id;
+          return await this.resolve(file, importer, { skipSelf: false });
+        },
+      };
+      const server = await setupServer({
+        plugins: [wrapRollupPlugin(plugin)],
+      });
+
+      try {
+        const text = await fetchText('app.js');
+        expectIncludes(text, `import moduleA from '${path.resolve('hello.js')}'`);
+      } finally {
+        server.close();
+      }
+    });
   });
 
   describe('load', () => {
@@ -264,7 +285,7 @@ describe.only('es-dev-server-rollup', () => {
       const text = await fetchText('app.js');
       expectIncludes(
         text,
-        'import "/__es-dev-server-rollup__/?null-byte=%00foo.js"'
+        'import "/__es-dev-server__/?es-dev-server-rollup-null-byte=%00foo.js"'
       );
     } finally {
       server.close();
@@ -285,7 +306,7 @@ describe.only('es-dev-server-rollup', () => {
     });
 
     try {
-      const text = await fetchText('__es-dev-server-rollup__/?null-byte=%00foo.js');
+      const text = await fetchText('__es-dev-server__/?es-dev-server-rollup-null-byte=%00foo.js');
       expectIncludes(
         text,
         'console.log("foo");'

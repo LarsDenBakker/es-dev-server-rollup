@@ -5,7 +5,6 @@ import {
   ParsedConfig,
   virtualFilePrefix,
 } from 'es-dev-server';
-import { URL, pathToFileURL, fileURLToPath } from 'url';
 import { Plugin as RollupPlugin, TransformPluginContext } from 'rollup';
 import {
   getTextContent,
@@ -21,11 +20,6 @@ import { createPluginContext } from './PluginContext';
 import { FSWatcher } from 'chokidar';
 
 const NULL_BYTE_PARAM = 'es-dev-server-rollup-null-byte';
-
-function resolveFilePath(rootDir: string, path: string) {
-  const fileUrl = new URL(`.${path}`, `${pathToFileURL(rootDir)}/`);
-  return fileURLToPath(fileUrl);
-}
 
 export function wrapRollupPlugin(
   rollupPlugin: RollupPlugin,
@@ -64,15 +58,15 @@ export function wrapRollupPlugin(
         return;
       }
 
-      if (whatwgUrl.parseURL(source) != null) {
-        // don't resolve valid urls
+      if (! path.isAbsolute(source) && whatwgUrl.parseURL(source) != null) {
+        // don't resolve relative and valid urls
         return source;
       }
 
       const requestedFile = context.path.endsWith('/')
         ? `${context.path}index.html`
         : context.path;
-      const filePath = resolveFilePath(rootDir, requestedFile);
+      const filePath = path.join(rootDir, requestedFile);
 
       const rollupPluginContext = createPluginContext(
         fileWatcher,
@@ -161,7 +155,7 @@ export function wrapRollupPlugin(
         // the file path is stored in the search paramter
         filePath = context.URL.searchParams.get(NULL_BYTE_PARAM) as string;
       } else {
-        filePath = resolveFilePath(rootDir, context.path);
+        filePath = path.join(rootDir, context.path);
       }
 
       const rollupPluginContext = createPluginContext(
@@ -192,7 +186,7 @@ export function wrapRollupPlugin(
       }
 
       if (context.response.is('js')) {
-        const filePath = resolveFilePath(rootDir, context.path);
+        const filePath = path.join(rootDir, context.path);
         const rollupPluginContext = createPluginContext(
           fileWatcher,
           config,
@@ -226,7 +220,7 @@ export function wrapRollupPlugin(
         const requestedFile = context.path.endsWith('/')
           ? `${context.path}index.html`
           : context.path;
-        const filePath = resolveFilePath(rootDir, requestedFile);
+        const filePath = path.join(rootDir, requestedFile);
         let changed = false;
 
         const documentAst = parseHtml(context.body);
