@@ -81,8 +81,9 @@ export function createPluginContext(
           (!options.skipSelf || pl.resolveImport !== plugin.resolveImport)
         ) {
           const result = await pl.resolveImport({ source, context });
+          const importerDir = path.dirname(importer)
           if (result) {
-            return { id: path.join(path.dirname(importer), result) };
+            return { id: result.startsWith(importerDir) ? result : path.join(importerDir, result) };
           }
         }
       }
