@@ -70,20 +70,33 @@ export function createPluginContext(
     },
     async resolve(
       source: string,
-      importer: string,
-      options: { skipSelf: boolean }
+      importer?: string,
+      options?: { skipSelf?: boolean }
     ) {
       if (!context) throw new Error('Context is required.');
+
+      const skipSelf = !!(options ? options.skipSelf : undefined);
 
       for (const pl of config.plugins) {
         if (
           pl.resolveImport &&
-          (!options.skipSelf || pl.resolveImport !== plugin.resolveImport)
+          (!skipSelf || pl.resolveImport !== plugin.resolveImport)
         ) {
           const result = await pl.resolveImport({ source, context });
-          const importerDir = path.dirname(importer)
+
+          if (!importer) {
+            return {
+              id: result,
+            };
+          }
+
+          const importerDir = path.dirname(importer);
           if (result) {
-            return { id: result.startsWith(importerDir) ? result : path.join(importerDir, result) };
+            return {
+              id: result.startsWith(importerDir)
+                ? result
+                : path.join(importerDir, result),
+            };
           }
         }
       }
