@@ -83,7 +83,7 @@ export function createPluginContext(
           const result = await pl.resolveImport({ source, context });
           const importerDir = path.dirname(importer)
           if (result) {
-            return { id: result.startsWith(importerDir) ? result : path.join(importerDir, result) };
+            return { id: path.isAbsolute(result) ? result : path.join(importerDir, result) };
           }
         }
       }
