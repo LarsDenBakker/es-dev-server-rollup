@@ -104,6 +104,48 @@ describe.only('es-dev-server-rollup', () => {
         server.close();
       }
     });
+
+    it('can resolve imports with plugins that use the `resolve` helper and Windows absolute paths', async () => {
+      const file = '../../hello.js';
+      const plugin: RollupPlugin = {
+        name: 'my-plugin',
+        async resolveId(id, importer) {
+          if(id === file) return 'c:\\hello.js';
+          return await this.resolve(file, importer, { skipSelf: false });
+        },
+      };
+      const server = await setupServer({
+        plugins: [wrapRollupPlugin(plugin)],
+      });
+
+      try {
+        const text = await fetchText('app.js');
+        expectIncludes(text, `import moduleA from 'c:\\hello.js'`);
+      } finally {
+        server.close();
+      }
+    });
+
+    it('can resolve imports with plugins that use the `resolve` helper and Linux absolute paths', async () => {
+      const file = '../../hello.js';
+      const plugin: RollupPlugin = {
+        name: 'my-plugin',
+        async resolveId(id, importer) {
+          if(id === file) return '/hello.js';
+          return await this.resolve(file, importer, { skipSelf: false });
+        },
+      };
+      const server = await setupServer({
+        plugins: [wrapRollupPlugin(plugin)],
+      });
+
+      try {
+        const text = await fetchText('app.js');
+        expectIncludes(text, `import moduleA from '/hello.js'`);
+      } finally {
+        server.close();
+      }
+    });
   });
 
   describe('load', () => {
