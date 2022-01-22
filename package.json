@@ -74,7 +74,7 @@
     "lit-element": "^2.3.1",
     "lit-html": "^1.2.1",
     "mocha": "^6.0.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^3.1.1",
     "react": "^16.13.1",
     "ts-mocha": "^7.0.0",
     "typescript": "^3.9.2"
